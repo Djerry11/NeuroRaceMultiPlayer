@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<head>
+    <title>NeuroRace- Camera</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="carCanvas" ></canvas>
+
+    <canvas id="cameraCanvas"></canvas>
+    <canvas id="ironManCanvas"></canvas>
+    
+      <!-- <canvas id="networkCanvas"></canvas> -->
+      <!-- <canvas id="miniMapCanvas"></canvas> -->
+      <div id="statistics"></div>
+      <div id="counter"></div>
+
+      
+      <!-- Include Socket.IO from CDN -->
+      <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+
+      <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+
+
+    <script src="world/js/world.js"></script>
+    <script src="world/js/viewport.js"></script>
+    <script src="world/js/markings/marking.js"></script>
+    <script src="world/js/markings/stop.js"></script>
+    <script src="world/js/markings/start.js"></script>
+    <script src="world/js/markings/crossing.js"></script>
+    <script src="world/js/markings/parking.js"></script>
+    <script src="world/js/markings/light.js"></script>
+    <script src="world/js/markings/target.js"></script>
+    <script src="world/js/markings/yield.js"></script>
+    <script src="world/js/editors/markingEditor.js"></script>
+    <script src="world/js/editors/graphEditor.js"></script>
+    <script src="world/js/editors/crossingEditor.js"></script>
+    <script src="world/js/editors/stopEditor.js"></script>
+    <script src="world/js/editors/startEditor.js"></script>
+    <script src="world/js/editors/parkingEditor.js"></script>
+    <script src="world/js/editors/lightEditor.js"></script>
+    <script src="world/js/editors/targetEditor.js"></script>
+    <script src="world/js/editors/yieldEditor.js"></script>
+    <script src="world/js/items/tree.js"></script>
+    <script src="world/js/items/building.js"></script>
+    <script src="world/js/math/utils.js"></script>
+    <script src="world/js/math/graph.js"></script>
+    <script src="world/js/primitives/point.js"></script>
+    <script src="world/js/primitives/segment.js"></script>
+    <script src="world/js/primitives/polygon.js"></script>
+    <script src="world/js/primitives/envelope.js"></script>
+
+    <!--<script src="world/saves/big.world"></script>-->
+    <!--<script src="world/saves/big_with_target.world"></script>-->
+    <script src="world/saves/path_finding.world"></script>
+    
+    <!-- <script src="saves/right_hand_rule.car"></script> -->
+
+    <!-- <script src="multiNetwork.js"></script> -->
+    <!-- <script src="lobby.js"></script> -->
+    <script src="miniMap.js"></script>
+    <script src="sound.js"></script>
+    <script src="camera.js"></script>
+    <script src="visualizer.js"></script>
+    <script src="network.js"></script>
+    <script src="sensor.js"></script>
+    <script src="utils.js"></script>
+    <script  src="controls.js"></script>
+    <script src="car.js"></script>
+
+    <script src="onlineRace.js"></script>
+
+    <script src="cameraControls.js"></script>
+    <script>
+        if(currentPlayer.playerNumber == 1)
+        {const controls = new CameraControls(ironManCanvas);
+        myCar.controls = controls;
+        // emitControls();
+        }
+    </script>
+</body>
+</html>

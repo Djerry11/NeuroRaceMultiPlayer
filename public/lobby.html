@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Multiplayer Lobby</title>
+    <link rel="stylesheet" href="lobby.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="create-join">
+        <h1>Create or Join Room</h1>
+        <button onclick="showCreateForm()">Create Room</button>
+        <button onclick="showJoinForm()">Join Room</button>
+
+        <div id="create-form" style="display: none">
+          <input type="text" id="player-name" placeholder="Your name" />
+          <label> <input type="checkbox" id="is-public" /> Public Room </label>
+          <button onclick="createRoom()">Create</button>
+        </div>
+
+        <div id="join-form" style="display: none">
+          <input type="text" id="join-player-name" placeholder="Your name" />
+          <input type="text" id="room-id" placeholder="Room ID" />
+          <button onclick="joinRoom()">Join</button>
+        </div>
+      </div>
+
+      <div class="lobby" style="display: none">
+        <h2>Room ID: <span id="room-id-display"></span></h2>
+        <p>Waiting for another player to join...</p>
+        <!-- START GAME BUTTON (visible only to host) -->
+        <button id="start-game-btn" onclick="startGame()" style="display: none">
+          Start Game
+        </button>
+        <div class="players-list">
+          <h3>Players in Room:</h3>
+          <ul id="players-list"></ul>
+        </div>
+      </div>
+
+      <div class="game-ui">
+        <h1>Game Started!</h1>
+        <div id="game-content"></div>
+      </div>
+
+      <div class="public-rooms">
+        <h2>Public Rooms</h2>
+        <ul id="public-rooms-list"></ul>
+      </div>
+    </div>
+
+    <!-- Use Socket.IO CDN -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="lobby.js"></script>
+  </body>
+</html>

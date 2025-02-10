@@ -1,0 +1,42 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.create-join {
+  margin-bottom: 20px;
+}
+.lobby {
+  display: none;
+  margin-top: 20px;
+}
+.game-ui {
+  display: none;
+  margin-top: 20px;
+}
+.players-list {
+  margin-top: 10px;
+}
+.players-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+.players-list li {
+  padding: 5px;
+  background: #f0f0f0;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+.public-rooms {
+  margin-top: 20px;
+}
+.public-rooms ul {
+  list-style-type: none;
+  padding: 0;
+}
+.public-rooms li {
+  padding: 10px;
+  background: #e0e0e0;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
