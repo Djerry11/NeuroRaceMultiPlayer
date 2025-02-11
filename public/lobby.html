@@ -1,54 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Multiplayer Lobby</title>
-    <link rel="stylesheet" href="lobby.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multiplayer Car Race Lobby</title>
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-pVI1j0Gzn8AtF7DgEt/j97U9pXpBswe9ulKz1qag0cF2ZUPeTJ53tS7fj7KnxDKWjzCFuH2XRj0E+oZC4+Xw0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="css/lobby.css" />
   </head>
   <body>
-    <div class="container">
-      <div class="create-join">
-        <h1>Create or Join Room</h1>
-        <button onclick="showCreateForm()">Create Room</button>
-        <button onclick="showJoinForm()">Join Room</button>
+    <div class="background">
+      <div class="lobby-container">
+        <header>
+          <h1><i class="fas fa-road"></i> Multiplayer Car Race</h1>
+        </header>
 
-        <div id="create-form" style="display: none">
-          <input type="text" id="player-name" placeholder="Your name" />
-          <label> <input type="checkbox" id="is-public" /> Public Room </label>
-          <button onclick="createRoom()">Create</button>
-        </div>
+        <!-- Create or Join Room Form -->
+        <section class="forms-container">
+          <div class="create-join">
+            <h2>Create or Join Room</h2>
+            <div class="buttons">
+              <button id="create-room-btn" onclick="showCreateForm()">
+                Create Room
+              </button>
+              <button id="join-room-btn" onclick="showJoinForm()">
+                Join Room
+              </button>
+            </div>
 
-        <div id="join-form" style="display: none">
-          <input type="text" id="join-player-name" placeholder="Your name" />
-          <input type="text" id="room-id" placeholder="Room ID" />
-          <button onclick="joinRoom()">Join</button>
-        </div>
-      </div>
+            <!-- Create Room Panel -->
+            <div id="create-form" class="form-panel hidden">
+              <input
+                type="text"
+                id="player-name"
+                placeholder="Enter Your Name"
+              />
+              <div class="checkbox-container">
+                <input type="checkbox" id="is-public" />
+                <label for="is-public">Public Room</label>
+              </div>
+              <button onclick="createRoom()">
+                <i class="fas fa-plus"></i> Create
+              </button>
+            </div>
 
-      <div class="lobby" style="display: none">
-        <h2>Room ID: <span id="room-id-display"></span></h2>
-        <p>Waiting for another player to join...</p>
-        <!-- START GAME BUTTON (visible only to host) -->
-        <button id="start-game-btn" onclick="startGame()" style="display: none">
-          Start Game
-        </button>
-        <div class="players-list">
-          <h3>Players in Room:</h3>
-          <ul id="players-list"></ul>
-        </div>
-      </div>
+            <!-- Join Room Panel -->
+            <div id="join-form" class="form-panel hidden">
+              <input
+                type="text"
+                id="join-player-name"
+                placeholder="Enter Your Name"
+              />
+              <input type="text" id="room-id" placeholder="Enter Room ID" />
+              <button onclick="joinRoom()">
+                <i class="fas fa-sign-in-alt"></i> Join
+              </button>
+            </div>
+          </div>
+        </section>
 
-      <div class="game-ui">
-        <h1>Game Started!</h1>
-        <div id="game-content"></div>
-      </div>
+        <!-- Lobby Waiting Area (visible after room creation/join) -->
+        <section class="lobby-section hidden">
+          <h2>Room ID: <span id="room-id-display"></span></h2>
+          <p>Waiting for another player to join...</p>
+          <!-- START GAME BUTTON (only visible to host) -->
+          <button id="start-game-btn" class="hidden" onclick="startGame()">
+            <i class="fas fa-flag-checkered"></i> Start Game
+          </button>
+          <div class="players-list-container">
+            <h3>Players in Room:</h3>
+            <ul id="players-list"></ul>
+          </div>
+        </section>
 
-      <div class="public-rooms">
-        <h2>Public Rooms</h2>
-        <ul id="public-rooms-list"></ul>
+        <!-- Public Rooms List -->
+        <section class="public-rooms-section">
+          <h2>Public Rooms</h2>
+          <ul id="public-rooms-list"></ul>
+        </section>
       </div>
     </div>
 
-    <!-- Use Socket.IO CDN -->
+    <!-- Socket.IO CDN -->
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script src="lobby.js"></script>
   </body>

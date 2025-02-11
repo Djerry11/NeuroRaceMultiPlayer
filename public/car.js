@@ -6,10 +6,9 @@ class Car {
     height,
     controlType,
     angle = 0,
-    // maxSpeed = 0.5,
     color = "red",
-    //used to identify the main car
     isMyCar = false,
+    maxSpeed = 7,
     playerId = "ldsjf"
   ) {
     this.x = x;
@@ -21,12 +20,12 @@ class Car {
 
     //collision detection
     this.collision = 0;
-    this.isMyCar = isMyCar;
-    // this.carId = carId;
 
+    // this.carId = carId;
+    this.isMyCar = isMyCar;
     this.speed = 0;
     this.acceleration = 0.2;
-    // this.maxSpeed = maxSpeed;
+    this.maxSpeed = maxSpeed;
     this.friction = 0.1;
     this.angle = angle;
     this.damaged = false;
@@ -83,7 +82,8 @@ class Car {
         this.speed = 0;
         this.collision += 1;
         console.log(this.collision);
-        if (this.type == "KEYS") {
+        if (this.type == "KEYS" || (this.type == "CAMERA" && this.isMyCar)) {
+          // console.log("COLLISION in car");
           explode();
         }
       }
@@ -103,18 +103,13 @@ class Car {
         this.controls.reverse = outputs[3];
       }
     }
-    if (this.engine) {
-      // const percent = Math.abs(this.speed / this.maxSpeed);
-      // this.engine.setVolume(percent);
-      // this.engine.setPitch(percent);
+    if (this.engine && this.isMyCar) {
+      const percent = Math.abs(this.speed / this.maxSpeed);
+      // console.log("SOUND PERCENT", percent);
+      // const percent = 0;
+      this.engine.setVolume(percent);
+      this.engine.setPitch(percent);
     }
-    // // Emit car position updates
-    // socket.emit("updateControls", {
-    //   x: this.x,
-    //   y: this.y,
-    //   angle: this.angle,
-    //   controls: this.controls,
-    // });
   }
 
   #assessDamage(roadBorders, traffic) {
@@ -172,7 +167,7 @@ class Car {
             this.speed += this.acceleration;
           }
         } else if (this.controls.predictedOutput == 3) {
-          if (this.speed <= 6) {
+          if (this.speed <= 5) {
             this.speed += this.acceleration;
           }
         } else if (this.controls.predictedOutput == 4) {
@@ -193,17 +188,17 @@ class Car {
       }
     }
     if (this.controls.reverse) {
-      if (this.speed >= -2) {
+      if (this.speed >= -1) {
         this.speed -= this.acceleration;
       }
     }
 
-    // if (this.speed > this.maxSpeed) {
-    //   this.speed = this.maxSpeed;
-    // }
-    // if (this.speed < -this.maxSpeed / 2) {
-    //   this.speed = -this.maxSpeed / 2;
-    // }
+    if (this.speed > this.maxSpeed) {
+      this.speed = this.maxSpeed;
+    }
+    if (this.speed < -this.maxSpeed / 2) {
+      this.speed = -this.maxSpeed / 2;
+    }
 
     if (this.speed > 0) {
       this.speed -= this.friction;
@@ -217,14 +212,18 @@ class Car {
 
     if (this.speed != 0) {
       if (this.controls.tilt) {
-        this.angle -= this.controls.tilt * 0.03;
+        if (this.speed > 0) {
+          this.angle -= this.controls.tilt * 0.03;
+        } else {
+          this.angle += this.controls.tilt * 0.03;
+        }
       } else {
         const flip = this.speed > 0 ? 1 : -1;
         if (this.controls.left) {
-          this.angle += 0.02 * flip;
+          this.angle += 0.03 * flip;
         }
         if (this.controls.right) {
-          this.angle -= 0.02 * flip;
+          this.angle -= 0.03 * flip;
         }
       }
     }

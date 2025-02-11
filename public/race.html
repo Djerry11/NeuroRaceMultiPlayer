@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <head>
     <title>NeuroRace- Camera</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <canvas id="carCanvas" ></canvas>
@@ -11,7 +11,7 @@
     <canvas id="ironManCanvas"></canvas>
     
       <!-- <canvas id="networkCanvas"></canvas> -->
-      <!-- <canvas id="miniMapCanvas"></canvas> -->
+      <canvas id="miniMapCanvas" class="miniMap"></canvas>
       <div id="statistics"></div>
       <div id="counter"></div>
 
@@ -78,8 +78,9 @@
     <script src="cameraControls.js"></script>
     <script>
         if(currentPlayer.playerNumber == 1)
-        {const controls = new CameraControls(ironManCanvas);
-        myCar.controls = controls;
+        {
+            const controls = new CameraControls(ironManCanvas);
+            myCar.controls = controls;
         // emitControls();
         }
     </script>

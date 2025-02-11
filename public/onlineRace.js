@@ -1,10 +1,12 @@
 // race.js
 const socket = io();
-
+let isCameraPlayer = false;
 // Retrieve player data from sessionStorage.
 const currentPlayer = JSON.parse(sessionStorage.getItem("currentPlayer"));
 const opponent = JSON.parse(sessionStorage.getItem("opponent"));
-carPostion = { x: 0, y: 0, angle: 0 };
+if (currentPlayer.playerNumber === 1) {
+  isCameraPlayer = true;
+}
 // Immediately reconnect to the room using the persistent token.
 socket.emit("reconnect-player", {
   playerToken: currentPlayer.playerId,
@@ -20,6 +22,8 @@ const cameraCanvas = document.getElementById("cameraCanvas");
 const statisticsEl = document.getElementById("statistics");
 const counterEl = document.getElementById("counter");
 
+const miniMapWidth = 300;
+
 document.body.style.flexDirection = "column";
 
 // --- Set canvas dimensions ---
@@ -32,9 +36,13 @@ cameraCanvas.height = window.innerHeight;
 const carCtx = carCanvas.getContext("2d");
 const cameraCtx = cameraCanvas.getContext("2d");
 
+//---- miiniMap canvas
+const miniMapCanvas = document.getElementById("miniMapCanvas");
+miniMapCanvas.width = miniMapWidth;
+miniMapCanvas.height = miniMapWidth;
+
 // --- Assume global objects: world, Viewport, Car, Camera, etc. ---
 const viewport = new Viewport(carCanvas, world.zoom, world.offset);
-
 // --- Global control state (for local control events) ---
 const currentControls = {
   forward: false,
@@ -48,6 +56,9 @@ const cars = generateCars(currentPlayer, opponent);
 const myCar = cars[0];
 const opponentCar = cars[1];
 const camera = new Camera(myCar);
+// const miniMap = new MiniMap(miniMapCanvas, world.graph, miniMapWidth, cars);
+// const miniMapGraph = new Graph([], world.corridor.skeleton);
+const miniMap = new MiniMap(miniMapCanvas, world.graph, miniMapWidth, cars);
 
 // --- Optionally load the best brain from sessionStorage ---
 if (sessionStorage.getItem("bestBrain")) {
@@ -101,10 +112,6 @@ function generateCars(currentPlayer, opponent) {
   const startAngle = -angle(dir) + Math.PI / 2;
   const cars = [];
 
-  carPostion.x = startPoint.x;
-  carPostion.y = startPoint.y;
-  carPostion.angle = startAngle;
-
   // Local player's car (controlled by keyboard)
   const localCar = new Car(
     startPoint.x,
@@ -113,7 +120,8 @@ function generateCars(currentPlayer, opponent) {
     50,
     "CAMERA",
     startAngle,
-    currentPlayer.playerNumber === 1 ? "blue" : "green"
+    currentPlayer.playerNumber === 1 ? "blue" : "green",
+    true
   );
   localCar.name = currentPlayer.name;
   localCar.playerId = currentPlayer.playerId;
@@ -184,7 +192,10 @@ function emitCameraControls() {
 socket.on("opponent-carData", (data) => {
   // data includes { posX, posY, angle,playerId, roomId }
   console.log("Received opponent car data:", data);
-  if (data.playerId === opponent.playerId) {
+  if (
+    data.playerId === opponent.playerId &&
+    data.roomId === currentPlayer.room
+  ) {
     opponentCar.controls = data.controls;
     if (
       opponentCar.x != data.posX ||
@@ -219,9 +230,12 @@ function updateCarProgress(car) {
       0
     );
     car.progress /= totalDistance;
-    if (car.progress >= 0.95) {
+    if (car.progress >= 0.98) {
       car.progress = 1;
       car.finishTime = frameCount;
+      if (car === myCar) {
+        taDaa();
+      }
     }
   }
 }
@@ -251,16 +265,21 @@ function handleCollisionWithRoadBorder(car) {
 // --- Countdown before starting the race ---
 function startCounter() {
   counterEl.innerText = "3";
+  beep(400);
   setTimeout(() => {
     counterEl.innerText = "2";
+    beep(400);
     setTimeout(() => {
       counterEl.innerText = "1";
+      beep(400);
       setTimeout(() => {
         counterEl.innerText = "Go!";
+        beep(800);
         setTimeout(() => {
           counterEl.innerText = "";
           started = true;
           frameCount = 0;
+          myCar.engine = new Engine();
         }, 1000);
       }, 1000);
     }, 1000);
@@ -284,6 +303,10 @@ function animate() {
   viewport.offset.x = -myCar.x;
   viewport.offset.y = -myCar.y;
   viewport.reset();
+  const viewPoint = scale(viewport.getOffset(), -1);
+  //world.draw(carCtx, viewPoint,false);
+  miniMap.update(viewPoint);
+  // miniMapCanvas.style.transform = "rotate(" + myCar.angle + "rad)";
   cars.forEach((car) => updateCarProgress(car));
   cars.sort((a, b) => b.progress - a.progress);
   for (let i = 0; i < cars.length; i++) {
@@ -298,69 +321,75 @@ function animate() {
     }
   }
   camera.move(myCar);
-  camera.draw(carCtx);
+  // camera.draw(carCtx);
   camera.render(cameraCtx, world);
   frameCount++;
   requestAnimationFrame(animate);
 }
 
 // --- Key event handlers ---
-document.addEventListener("keydown", (event) => {
-  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
-    event.preventDefault();
-  }
-  let changed = false;
-  if (event.key === "ArrowUp" && !currentControls.forward) {
-    currentControls.forward = true;
-    changed = true;
-  }
-  if (event.key === "ArrowDown" && !currentControls.reverse) {
-    currentControls.reverse = true;
-    changed = true;
-  }
-  if (event.key === "ArrowLeft" && !currentControls.left) {
-    currentControls.left = true;
-    changed = true;
-  }
-  if (event.key === "ArrowRight" && !currentControls.right) {
-    currentControls.right = true;
-    changed = true;
-  }
-  if (changed) {
-    myCar.controls.forward = currentControls.forward;
-    myCar.controls.reverse = currentControls.reverse;
-    myCar.controls.left = currentControls.left;
-    myCar.controls.right = currentControls.right;
-    emitControls();
-  }
-});
+if (!isCameraPlayer) {
+  document.addEventListener("keydown", (event) => {
+    if (
+      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
+    ) {
+      event.preventDefault();
+    }
+    let changed = false;
+    if (event.key === "ArrowUp" && !currentControls.forward) {
+      currentControls.forward = true;
+      changed = true;
+    }
+    if (event.key === "ArrowDown" && !currentControls.reverse) {
+      currentControls.reverse = true;
+      changed = true;
+    }
+    if (event.key === "ArrowLeft" && !currentControls.left) {
+      currentControls.left = true;
+      changed = true;
+    }
+    if (event.key === "ArrowRight" && !currentControls.right) {
+      currentControls.right = true;
+      changed = true;
+    }
+    if (changed) {
+      myCar.controls.forward = currentControls.forward;
+      myCar.controls.reverse = currentControls.reverse;
+      myCar.controls.left = currentControls.left;
+      myCar.controls.right = currentControls.right;
+      emitControls();
+    }
+  });
 
-document.addEventListener("keyup", (event) => {
-  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
-    event.preventDefault();
-  }
-  let changed = false;
-  if (event.key === "ArrowUp" && currentControls.forward) {
-    currentControls.forward = false;
-    changed = true;
-  }
-  if (event.key === "ArrowDown" && currentControls.reverse) {
-    currentControls.reverse = false;
-    changed = true;
-  }
-  if (event.key === "ArrowLeft" && currentControls.left) {
-    currentControls.left = false;
-    changed = true;
-  }
-  if (event.key === "ArrowRight" && currentControls.right) {
-    currentControls.right = false;
-    changed = true;
-  }
-  if (changed) {
-    myCar.controls.forward = currentControls.forward;
-    myCar.controls.reverse = currentControls.reverse;
-    myCar.controls.left = currentControls.left;
-    myCar.controls.right = currentControls.right;
-    emitControls();
-  }
-});
+  document.addEventListener("keyup", (event) => {
+    if (
+      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
+    ) {
+      event.preventDefault();
+    }
+    let changed = false;
+    if (event.key === "ArrowUp" && currentControls.forward) {
+      currentControls.forward = false;
+      changed = true;
+    }
+    if (event.key === "ArrowDown" && currentControls.reverse) {
+      currentControls.reverse = false;
+      changed = true;
+    }
+    if (event.key === "ArrowLeft" && currentControls.left) {
+      currentControls.left = false;
+      changed = true;
+    }
+    if (event.key === "ArrowRight" && currentControls.right) {
+      currentControls.right = false;
+      changed = true;
+    }
+    if (changed) {
+      myCar.controls.forward = currentControls.forward;
+      myCar.controls.reverse = currentControls.reverse;
+      myCar.controls.left = currentControls.left;
+      myCar.controls.right = currentControls.right;
+      emitControls();
+    }
+  });
+}
