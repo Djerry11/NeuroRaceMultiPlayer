@@ -131,7 +131,7 @@
 //       const rightHand = hand1.x < hand2.x ? hand2 : hand1;
 
 //       const recognizedGesture = await this.predictGesture(hands[0]);
-//       this.#processMarkers({
+//       this.#processGestures({
 //         leftHand,
 //         rightHand,
 //         recognizedGesture,
@@ -139,7 +139,7 @@
 //     }
 //   }
 
-//   #processMarkers({ leftHand, rightHand, recognizedGesture }) {
+//   #processGestures({ leftHand, rightHand, recognizedGesture }) {
 //     // Calculate tilt using wrist positions
 //     this.tilt =
 //       1.2 * Math.atan2(-(rightHand.y - leftHand.y), rightHand.x - leftHand.x);
@@ -319,14 +319,14 @@ class CameraControls {
 
     // Only recognize gestures from the right hand
     const recognizedGesture = await this.predictGesture(leftHand);
-    this.#processMarkers({
+    this.#processGestures({
       leftHand: leftHand[0],
       rightHand: rightHand[0],
       recognizedGesture,
     });
   }
 
-  #processMarkers({ leftHand, rightHand, recognizedGesture }) {
+  #processGestures({ leftHand, rightHand, recognizedGesture }) {
     // Calculate tilt using wrist positions
     this.tilt =
       1.2 * Math.atan2(-(rightHand.y - leftHand.y), rightHand.x - leftHand.x);
@@ -338,7 +338,7 @@ class CameraControls {
       this.reverse = true;
       this.predictedOutput = 0;
       currentControls.predictedOutput = 0;
-      emitCameraControls();
+      emitControls();
     } else if (recognizedGesture == 1) {
       this.forward = true;
       this.reverse = false;
@@ -346,7 +346,7 @@ class CameraControls {
       currentControls.forward = true;
       currentControls.reverse = false;
       currentControls.predictedOutput = 1;
-      emitCameraControls();
+      emitControls();
     } else if (recognizedGesture == 2) {
       this.forward = true;
       this.reverse = false;
@@ -354,7 +354,7 @@ class CameraControls {
       currentControls.forward = true;
       currentControls.reverse = false;
       currentControls.predictedOutput = 2;
-      emitCameraControls();
+      emitControls();
     } else if (recognizedGesture == 4) {
       this.forward = true;
       this.reverse = false;
@@ -362,7 +362,7 @@ class CameraControls {
       currentControls.forward = true;
       currentControls.reverse = false;
       currentControls.predictedOutput = 4;
-      emitCameraControls();
+      emitControls();
     } else if (recognizedGesture == 3) {
       this.forward = true;
       this.reverse = false;
@@ -370,7 +370,7 @@ class CameraControls {
       currentControls.forward = true;
       currentControls.reverse = false;
       currentControls.predictedOutput = 3;
-      emitCameraControls();
+      emitControls();
     } else if (recognizedGesture == 5) {
       this.forward = false;
       this.reverse = false;
@@ -378,7 +378,7 @@ class CameraControls {
       currentControls.forward = false;
       currentControls.reverse = false;
       currentControls.predictedOutput = 5;
-      emitCameraControls();
+      emitControls();
     }
   }
 }
