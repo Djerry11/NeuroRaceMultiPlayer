@@ -1,0 +1,227 @@
+/* Import Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body,
+html {
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Full-screen gradient background */
+.background {
+  background: linear-gradient(135deg, #0d47a1, #1976d2);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Main Lobby Container */
+.lobby-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  max-width: 800px;
+  width: 100%;
+  padding: 30px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Header styles */
+header h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+header h1 i {
+  margin-right: 10px;
+  color: #e65100;
+}
+
+/* Sections */
+.forms-container,
+.lobby-section,
+.public-rooms-section {
+  margin-bottom: 30px;
+}
+
+/* Create/Join Room Section */
+.create-join h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.buttons button {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.buttons button:hover {
+  background: #0d47a1;
+}
+
+/* Form Panels */
+.form-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.form-panel input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.form-panel button {
+  background: #388e3c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.form-panel button:hover {
+  background: #2e7d32;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Lobby Section */
+.lobby-section h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.lobby-section p {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+#start-game-btn {
+  display: block;
+  margin: 0 auto 20px auto;
+  background: #e65100;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+#start-game-btn:hover {
+  background: #bf360c;
+}
+
+.players-list-container {
+  text-align: center;
+}
+
+.players-list-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.player-item {
+  margin: 5px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.player-item i {
+  margin-right: 8px;
+  color: #e65100;
+}
+
+/* Public Rooms Section */
+.public-rooms-section h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.public-rooms-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.room-item {
+  background: #f5f5f5;
+  margin: 8px 0;
+  padding: 10px 15px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.room-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.room-info span {
+  font-size: 14px;
+  color: #333;
+}
+
+.room-icon i {
+  color: #e65100;
+  margin-right: 5px;
+}
+
+.room-action button {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.room-action button:hover {
+  background: #0d47a1;
+}
+
+/* Utility class to hide elements */
+.hidden {
+  display: none;
+}

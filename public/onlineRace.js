@@ -230,9 +230,12 @@ function updateCarProgress(car) {
       0
     );
     car.progress /= totalDistance;
-    if (car.progress >= 0.95) {
+    if (car.progress >= 0.98) {
       car.progress = 1;
       car.finishTime = frameCount;
+      if (car === myCar) {
+        taDaa();
+      }
     }
   }
 }
