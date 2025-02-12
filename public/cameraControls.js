@@ -433,16 +433,17 @@ class CameraControls {
     drawExtendedGrip(Math.PI * -1.75); // 7.5 o'clock
 
     // Draw embossed gear label (in front of the base)
-    ctx.font = `${baseRadius * 0.8}px Arial`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+    // ctx.font = `${baseRadius * 0.8}px Arial`;
+    // ctx.textAlign = "center";
+    // ctx.textBaseline = "middle";
 
     // Emboss effect using shadow
-    ctx.fillStyle = "#ffffff";
+    // ctx.fillStyle = "#ffffff";
     // ctx.shadowColor = "rgba(0,0,0,0.5)";
     // ctx.shadowBlur = 5;
     // ctx.shadowOffsetX = 2;
     // ctx.shadowOffsetY = 2;
+
     ctx.fillText(gearLabel, 0, 0);
 
     // Reset shadow

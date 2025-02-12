@@ -1,12 +1,12 @@
 // race.js
 const socket = io();
-let isCameraPlayer = false;
+// let isCameraPlayer = false;
 // Retrieve player data from sessionStorage.
 const currentPlayer = JSON.parse(sessionStorage.getItem("currentPlayer"));
 const opponent = JSON.parse(sessionStorage.getItem("opponent"));
-if (currentPlayer.playerNumber === 1) {
-  isCameraPlayer = true;
-}
+// if (currentPlayer.playerNumber === 1) {
+//   isCameraPlayer = true;
+// }
 // Immediately reconnect to the room using the persistent token.
 socket.emit("reconnect-player", {
   playerToken: currentPlayer.playerId,
@@ -326,69 +326,69 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-// --- Key event handlers ---
-if (!isCameraPlayer) {
-  document.addEventListener("keydown", (event) => {
-    if (
-      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
-    ) {
-      event.preventDefault();
-    }
-    let changed = false;
-    if (event.key === "ArrowUp" && !currentControls.forward) {
-      currentControls.forward = true;
-      changed = true;
-    }
-    if (event.key === "ArrowDown" && !currentControls.reverse) {
-      currentControls.reverse = true;
-      changed = true;
-    }
-    if (event.key === "ArrowLeft" && !currentControls.left) {
-      currentControls.left = true;
-      changed = true;
-    }
-    if (event.key === "ArrowRight" && !currentControls.right) {
-      currentControls.right = true;
-      changed = true;
-    }
-    if (changed) {
-      myCar.controls.forward = currentControls.forward;
-      myCar.controls.reverse = currentControls.reverse;
-      myCar.controls.left = currentControls.left;
-      myCar.controls.right = currentControls.right;
-      emitControls();
-    }
-  });
+// // --- Key event handlers ---
+// if (!isCameraPlayer) {
+//   document.addEventListener("keydown", (event) => {
+//     if (
+//       ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
+//     ) {
+//       event.preventDefault();
+//     }
+//     let changed = false;
+//     if (event.key === "ArrowUp" && !currentControls.forward) {
+//       currentControls.forward = true;
+//       changed = true;
+//     }
+//     if (event.key === "ArrowDown" && !currentControls.reverse) {
+//       currentControls.reverse = true;
+//       changed = true;
+//     }
+//     if (event.key === "ArrowLeft" && !currentControls.left) {
+//       currentControls.left = true;
+//       changed = true;
+//     }
+//     if (event.key === "ArrowRight" && !currentControls.right) {
+//       currentControls.right = true;
+//       changed = true;
+//     }
+//     if (changed) {
+//       myCar.controls.forward = currentControls.forward;
+//       myCar.controls.reverse = currentControls.reverse;
+//       myCar.controls.left = currentControls.left;
+//       myCar.controls.right = currentControls.right;
+//       emitControls();
+//     }
+//   });
 
-  document.addEventListener("keyup", (event) => {
-    if (
-      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
-    ) {
-      event.preventDefault();
-    }
-    let changed = false;
-    if (event.key === "ArrowUp" && currentControls.forward) {
-      currentControls.forward = false;
-      changed = true;
-    }
-    if (event.key === "ArrowDown" && currentControls.reverse) {
-      currentControls.reverse = false;
-      changed = true;
-    }
-    if (event.key === "ArrowLeft" && currentControls.left) {
-      currentControls.left = false;
-      changed = true;
-    }
-    if (event.key === "ArrowRight" && currentControls.right) {
-      currentControls.right = false;
-      changed = true;
-    }
-    if (changed) {
-      myCar.controls.forward = currentControls.forward;
-      myCar.controls.reverse = currentControls.reverse;
-      myCar.controls.left = currentControls.left;
-      myCar.controls.right = currentControls.right;
-      emitControls();
-    }
-  });
-}
+//   document.addEventListener("keyup", (event) => {
+//     if (
+//       ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
+//     ) {
+//       event.preventDefault();
+//     }
+//     let changed = false;
+//     if (event.key === "ArrowUp" && currentControls.forward) {
+//       currentControls.forward = false;
+//       changed = true;
+//     }
+//     if (event.key === "ArrowDown" && currentControls.reverse) {
+//       currentControls.reverse = false;
+//       changed = true;
+//     }
+//     if (event.key === "ArrowLeft" && currentControls.left) {
+//       currentControls.left = false;
+//       changed = true;
+//     }
+//     if (event.key === "ArrowRight" && currentControls.right) {
+//       currentControls.right = false;
+//       changed = true;
+//     }
+//     if (changed) {
+//       myCar.controls.forward = currentControls.forward;
+//       myCar.controls.reverse = currentControls.reverse;
+//       myCar.controls.left = currentControls.left;
+//       myCar.controls.right = currentControls.right;
+//       emitControls();
+//     }
+//   });
+// }
