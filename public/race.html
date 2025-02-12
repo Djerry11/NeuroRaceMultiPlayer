@@ -16,6 +16,7 @@
       <div id="statistics"></div>
       <div id="counter"></div>
 
+
       
       <!-- Include Socket.IO from CDN -->
       <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
@@ -67,7 +68,7 @@
     <script src="miniMap.js"></script>
     <script src="sound.js"></script>
     <script src="camera.js"></script>
-    <script src="visualizer.js"></script>
+    <!-- <script src="visualizer.js"></script> -->
     <script src="network.js"></script>
     <script src="sensor.js"></script>
     <script src="utils.js"></script>
@@ -76,14 +77,17 @@
 
     <script src="onlineRace.js"></script>
 
+
     <script src="cameraControls.js"></script>
     <script>
-        // if(currentPlayer.playerNumber == 1)
-        // {
+        if(isCameraPlayer)
+        {
+            // Attach to an existing div
+
             const controls = new CameraControls(ironManCanvas);
             myCar.controls = controls;
-        // emitControls();
 
+        }
     </script>
 </body>
 </html>

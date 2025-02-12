@@ -1,12 +1,12 @@
 // race.js
 const socket = io();
-let isCameraPlayer = true;
+let isCameraPlayer = false;
 // Retrieve player data from sessionStorage.
 const currentPlayer = JSON.parse(sessionStorage.getItem("currentPlayer"));
 const opponent = JSON.parse(sessionStorage.getItem("opponent"));
-// if (currentPlayer.playerNumber === 1) {
-//   isCameraPlayer = true;
-// }
+if (currentPlayer.playerNumber === 1) {
+  isCameraPlayer = true;
+}
 // Immediately reconnect to the room using the persistent token.
 socket.emit("reconnect-player", {
   playerToken: currentPlayer.playerId,
@@ -57,7 +57,7 @@ const myCar = cars[0];
 const opponentCar = cars[1];
 const camera = new Camera(myCar);
 // const miniMap = new MiniMap(miniMapCanvas, world.graph, miniMapWidth, cars);
-// const miniMapGraph = new Graph([], world.corridor.skeleton);
+const miniMapGraph = new Graph([], world.graph);
 const miniMap = new MiniMap(miniMapCanvas, world.graph, miniMapWidth, cars);
 
 // --- Optionally load the best brain from sessionStorage ---
@@ -155,29 +155,27 @@ function generateCars(currentPlayer, opponent) {
 
   return cars;
 }
-
+//send final score and race time to server
+function emitScore(score, finalTime) {
+  // console.log("Emitting score:", score, finalTime);
+  socket.emit("raceCompleted", {
+    score,
+    finalTime,
+  });
+}
+socket.on("opponent-score", (data) => {
+  console.log("Received opponent score:", data);
+  // data includes { score, finalTime }
+  if (opponent.playerId === data.playerId) {
+    opponent.score = data.score;
+    opponent.finalTime = data.finalTime;
+  }
+});
 // --- Emit control state to server ---
 // Now we include playerToken and roomId along with the controls.
 function emitControls() {
-  console.log("Emitting controls:", currentControls);
-  // socket.emit("control", {
-  //   controls: { ...currentControls },
-  //   playerId: currentPlayer.playerId,
-  //   roomId: currentPlayer.room,
-  // });
+  // console.log("Emitting controls:", currentControls);
   socket.emit("controlCar", {
-    posX: myCar.x,
-    posY: myCar.y,
-    angle: myCar.angle,
-    controls: { ...currentControls },
-    playerId: currentPlayer.playerId,
-    roomId: currentPlayer.room,
-  });
-}
-
-//camera
-function emitCameraControls() {
-  socket.emit("cameraControlCar", {
     posX: myCar.x,
     posY: myCar.y,
     angle: myCar.angle,
@@ -234,6 +232,7 @@ function updateCarProgress(car) {
       car.progress = 1;
       car.finishTime = frameCount;
       if (car === myCar) {
+        emitScore(1, frameCount);
         taDaa();
       }
     }
