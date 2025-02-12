@@ -64,6 +64,8 @@ io.on("connection", (socket) => {
       playerNumber: 1,
       socketId: socket.id,
       playerId: playerToken, // Persistent id for client comparisons.
+      score: 0,
+      finalTime: 0,
     };
 
     socket.join(roomId);
@@ -93,6 +95,8 @@ io.on("connection", (socket) => {
       playerNumber: 2,
       socketId: socket.id,
       playerId: playerToken,
+      score: 0,
+      finalTime: 0,
     };
 
     socket.join(roomId);
@@ -142,6 +146,14 @@ io.on("connection", (socket) => {
       controls,
       playerId,
       roomId,
+    });
+  });
+  socket.on("raceCompleted", (data) => {
+    console.log("Received control data:", data);
+    const { score, finalTime } = data;
+    io.emit("opponent-score", {
+      score,
+      finalTime,
     });
   });
 

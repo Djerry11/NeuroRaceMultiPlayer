@@ -1,8 +1,9 @@
 
 <!DOCTYPE html>
 <head>
-    <title>NeuroRace- Camera</title>
+    <title>NeuroRace-Multiplayer</title>
     <link rel="stylesheet" href="css/style.css">
+    
 </head>
 <body>
     <canvas id="carCanvas" ></canvas>
@@ -14,6 +15,7 @@
       <canvas id="miniMapCanvas" class="miniMap"></canvas>
       <div id="statistics"></div>
       <div id="counter"></div>
+
 
       
       <!-- Include Socket.IO from CDN -->
@@ -66,7 +68,7 @@
     <script src="miniMap.js"></script>
     <script src="sound.js"></script>
     <script src="camera.js"></script>
-    <script src="visualizer.js"></script>
+    <!-- <script src="visualizer.js"></script> -->
     <script src="network.js"></script>
     <script src="sensor.js"></script>
     <script src="utils.js"></script>
@@ -75,14 +77,16 @@
 
     <script src="onlineRace.js"></script>
 
+
     <script src="cameraControls.js"></script>
     <script>
-        if(currentPlayer.playerNumber == 1)
-        {
+        // if(isCameraPlayer)
+        // {
+            // Attach to an existing div
             const controls = new CameraControls(ironManCanvas);
             myCar.controls = controls;
-        // emitControls();
-        }
+
+        // }
     </script>
 </body>
 </html>

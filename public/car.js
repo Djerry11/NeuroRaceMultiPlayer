@@ -19,7 +19,7 @@ class Car {
     this.type = controlType;
 
     //collision detection
-    this.collision = 0;
+    this.collision = false;
 
     // this.carId = carId;
     this.isMyCar = isMyCar;
@@ -79,9 +79,8 @@ class Car {
       this.polygon = this.#createPolygon();
       this.damaged = this.#assessDamage(roadBorders, traffic);
       if (this.damaged) {
+        this.collision = true;
         this.speed = 0;
-        this.collision += 1;
-        console.log(this.collision);
         if (this.type == "KEYS" || (this.type == "CAMERA" && this.isMyCar)) {
           // console.log("COLLISION in car");
           explode();
@@ -160,7 +159,7 @@ class Car {
         if (this.controls.predictedOutput == 1) {
           if (this.speed <= 2) {
             this.speed += this.acceleration;
-            console.log(this.speed);
+            // console.log(this.speed);
           }
         } else if (this.controls.predictedOutput == 2) {
           if (this.speed <= 3) {
@@ -209,7 +208,6 @@ class Car {
     if (Math.abs(this.speed) < this.friction) {
       this.speed = 0;
     }
-
     if (this.speed != 0) {
       if (this.controls.tilt) {
         if (this.speed > 0) {
@@ -227,6 +225,13 @@ class Car {
         }
       }
     }
+    if (this.collision) {
+      this.maxSpeed = 2;
+      setTimeout(() => {
+        this.maxSpeed = 7;
+        this.collision = false;
+      }, 5000);
+    }
     //measuring the speed
     // console.log(this.speed);
 
@@ -234,31 +239,31 @@ class Car {
     this.y -= Math.cos(this.angle) * this.speed;
   }
 
-  draw(ctx, drawSensor = false) {
-    if (this.sensor && drawSensor) {
-      //this.sensor.draw(ctx);
-    }
+  // draw(ctx, drawSensor = false) {
+  //   if (this.sensor && drawSensor) {
+  //     //this.sensor.draw(ctx);
+  //   }
 
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(-this.angle);
-    if (!this.damaged) {
-      ctx.drawImage(
-        this.mask,
-        -this.width / 2,
-        -this.height / 2,
-        this.width,
-        this.height
-      );
-      ctx.globalCompositeOperation = "multiply";
-    }
-    ctx.drawImage(
-      this.img,
-      -this.width / 2,
-      -this.height / 2,
-      this.width,
-      this.height
-    );
-    ctx.restore();
-  }
+  //   ctx.save();
+  //   ctx.translate(this.x, this.y);
+  //   ctx.rotate(-this.angle);
+  //   if (!this.damaged) {
+  //     ctx.drawImage(
+  //       this.mask,
+  //       -this.width / 2,
+  //       -this.height / 2,
+  //       this.width,
+  //       this.height
+  //     );
+  //     ctx.globalCompositeOperation = "multiply";
+  //   }
+  //   ctx.drawImage(
+  //     this.img,
+  //     -this.width / 2,
+  //     -this.height / 2,
+  //     this.width,
+  //     this.height
+  //   );
+  //   ctx.restore();
+  // }
 }
